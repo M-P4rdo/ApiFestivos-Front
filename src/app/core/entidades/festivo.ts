@@ -1,5 +1,10 @@
+import { Tipo } from './tipo';
+
 export interface Festivo {
-    id: number;
-    nombre: string;
-    entidad: string;
+    "id": number,
+    "nombre": String,
+    "dia": number,
+    "mes": number,
+    "diasPascua": number,
+    "tipo": Tipo
 }
