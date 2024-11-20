@@ -10,7 +10,7 @@ import { Festivo } from '../../core/entidades/festivo';
 export class FestivoService {
 
   private url: string;
-  private token: string = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmcmF5IiwiaWF0IjoxNzMxOTg3NjA2LCJleHAiOjE3MzE5ODk0MDZ9.YnWRiUOZtKTawU3wDneQ3ndEWyjN_dVyqZeRmeqMbsE";
+  private token: string = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNLlBhcmRvIiwiaWF0IjoxNzMyMDYzNTYzLCJleHAiOjE3MzIwNjUzNjN9.AlzUQPfspabLnbjNsH8xgM4E4oMzFe0c85wFQGs0Woc";
 
   constructor(private http: HttpClient) { 
     this.url = `${environment.urlBase}festivos/`;
@@ -22,12 +22,12 @@ export class FestivoService {
     });
   }
 
-  public listar(): Observable<Festivo[]> {
-    return this.http.get<Festivo[]>(`${this.url}listar`, { headers: this.obtenerHeaders() });
+  public listar(año: number): Observable<Festivo[]> {
+    return this.http.get<Festivo[]>(`${this.url}listar/${año}`, { headers: this.obtenerHeaders() });
   }
 
-  public validar(dia: number, mes: number, año: number): Observable<Festivo[]> {
-    return this.http.get<Festivo[]>(`${this.url}Validar/${dia}/${mes}/${año}`, { headers: this.obtenerHeaders() });
+  public validar(dia: number, mes: number, año: number): Observable<String> {
+    return this.http.get<String>(`${this.url}validar/${dia}/${mes}/${año}`, { headers: this.obtenerHeaders(), responseType: 'text' as 'json' });
   }
 
 }

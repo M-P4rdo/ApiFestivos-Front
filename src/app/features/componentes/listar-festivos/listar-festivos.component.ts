@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ColumnMode, NgxDatatableModule, SelectionType } from '@swimlane/ngx-datatable';
 import { Festivo } from '../../../core/entidades/festivo';
 import { FestivoService } from '../../servicios/festivo.service';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-listar-festivos',
@@ -20,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 export class ListarFestivosComponent implements OnInit{
 
-  public textoBusqueda: string = "";
+  public fecha: number = 0;
   public festivos: Festivo[] =[];
   public columnas = [
     { name: "Festivo", prop: "festivo" },
@@ -28,20 +27,26 @@ export class ListarFestivosComponent implements OnInit{
   ];
   public modoColumna = ColumnMode;
   public tipoSeleccion = SelectionType;
+  public festivosTabla: { festivo: String, fecha: String }[] = [];
 
-  private seleccionEscogida: Festivo | undefined;
-  private indiceSeleccionEscogida: number = -1;
-
-  constructor(private festivoServicio: FestivoService, private dialogoServicio: MatDialog) { }
+  constructor(private festivoServicio: FestivoService) { }
   
   ngOnInit(): void {
-    this.listar();
+    if (this.fecha!== null) {
+      this.listarFestivos(this.fecha);
+    }
   }
 
-  public listar() {
-    this.festivoServicio.listar().subscribe({
+  public listarFestivos(año: number) {
+    this.festivoServicio.listar(año).subscribe({
       next: respuesta => {
-        this.festivos = respuesta;
+        this.festivos = respuesta;  // Asignamos la respuesta al array de festivos
+
+        // Actualizamos festivosTabla con los nuevos datos
+        this.festivosTabla = this.festivos.map(festivo => ({
+          festivo: festivo.nombre,  // Extraemos el nombre
+          fecha: `${año}-${festivo.mes}-${festivo.dia}`  // Creamos la fecha con el día, mes y año
+        }));
       },
       error: error => {
         window.alert(error.message);
